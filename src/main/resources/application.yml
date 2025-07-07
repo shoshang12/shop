@@ -2,8 +2,18 @@ server:
   port: 8094
 
 spring:
-  application:
-    name: shop
+  security:
+    user:
+      name: test
+      password: 12345
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  thymeleaf:
+    cache: false
+
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
