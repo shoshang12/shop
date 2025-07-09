@@ -14,14 +14,31 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.formLogin(Customizer.withDefaults());
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.formLogin(form -> form
+                .loginPage("/members/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/members/login/error")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .permitAll());
+
         http.logout(Customizer.withDefaults());
+
+        http.authorizeRequests(request -> request
+                .requestMatchers("/css/**").permitAll()
+                .requestMatchers("/", "/members/**").permitAll()
+                .anyRequest().authenticated());
+
+        http.logout(Customizer.withDefaults());
+
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder()   {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
